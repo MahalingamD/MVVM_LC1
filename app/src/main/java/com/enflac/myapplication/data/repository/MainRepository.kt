@@ -12,9 +12,6 @@ class MainRepository : SafeApiRequest() {
         val aJsonObj = JsonObject()
         aJsonObj.addProperty("email", aEmail)
         aJsonObj.addProperty("password", aPassword)
-
-
         return apiRequest{RestClient.getService().userLogin(aJsonObj)}
-
     }
 }

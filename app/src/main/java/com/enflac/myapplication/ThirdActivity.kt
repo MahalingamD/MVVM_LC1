@@ -7,16 +7,25 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.enflac.myapplication.databinding.ActivityThirdBinding
+import kotlinx.android.synthetic.main.activity_third.view.*
 
 class ThirdActivity : AppCompatActivity() {
 
-    lateinit var mBinding:ActivityThirdBinding
+    lateinit var mBinding: ActivityThirdBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBinding=DataBindingUtil.setContentView(this,R.layout.activity_third)
-        mBinding.thirdActivity=this
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_third)
+        mBinding.thirdActivity = this
+        mBinding.thirdActivity = this
+
+
+        val aDrawerLayout = mBinding.drawerLayout
+
+        val aNavigationView = mBinding.navView
+        val aMenuRecyclerview = aNavigationView.menu_rv
+
         Log.e("Thirdcycle", "onCreate")
     }
 

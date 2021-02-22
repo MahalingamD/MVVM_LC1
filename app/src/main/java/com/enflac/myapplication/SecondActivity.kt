@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import com.enflac.myapplication.databinding.ActivitySecondBinding
+import com.enflac.myapplication.utils.ThemeHelper
+import com.enflac.myapplication.utils.toast
 
 class SecondActivity : AppCompatActivity() {
 
@@ -16,10 +19,38 @@ class SecondActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_second)
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         mBinding.secondactivity = this
 
-        Log.e("Secondcycle", "onCreate")
+        getBundle()
+
+        lamdafun()
+
+      //  Log.e("Secondcycle", "onCreate")
+    }
+
+    private fun getBundle() {
+        val bundle: Bundle? = intent.extras
+        val aRecValue = bundle?.getString("Passvalue") ?: ""
+        toast(aRecValue)
+    }
+
+    private fun lamdafun() {
+
+        val amulti = { aNumber: Int ->
+            val sq = aNumber * aNumber
+            sq
+        }
+
+        Log.e("Lamdafunction", "" + amulti(9))
+
+        val aaa: (Int) -> String = { aNumber: Int ->
+            aNumber.toString()
+        }
+
+        val add = { a: ArrayList<String>, b: String ->
+            (a + b).toString()
+        }
     }
 
     override fun onStart() {
@@ -59,7 +90,25 @@ class SecondActivity : AppCompatActivity() {
 
     fun onNextActivity(aView: View) {
         val aIntent = Intent(this, ThirdActivity::class.java)
-       // aIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        // aIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(aIntent)
+    }
+
+    fun onCheckedchange(aBool: Boolean) {
+        if (aBool) {
+            //  ThemeHelper.applyTheme("darkMode")
+            //   AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            // val aIntent=intent
+            // intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            //  finish()
+            //  startActivity(aIntent)
+        } else {
+            ThemeHelper.applyTheme("lightMode")
+            val aIntent = intent
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            finish()
+            startActivity(aIntent)
+        }
+        //Log.e("ASSSSSSSSS",""+aBool)
     }
 }
