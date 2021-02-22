@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="secondactivity"
             type="com.enflac.myapplication.SecondActivity" />
@@ -14,17 +15,33 @@
         android:layout_height="match_parent"
         tools:context=".SecondActivity">
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/ui_change"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="UIMODE"
+
+            android:onCheckedChanged="@{(button,bool)->secondactivity.onCheckedchange(bool)}"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.5"
+            tools:ignore="MissingConstraints" />
+
         <Button
             android:id="@+id/button2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Second"
             android:onClick="@{(view)->secondactivity.onNextActivity(view)}"
+            android:text="Second"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

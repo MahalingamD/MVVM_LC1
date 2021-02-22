@@ -2,11 +2,7 @@ package com.enflac.myapplication.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.View
-import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -14,50 +10,57 @@ import androidx.lifecycle.ViewModelProvider
 import com.enflac.myapplication.R
 import com.enflac.myapplication.SecondActivity
 import com.enflac.myapplication.databinding.ActivityMainBinding
-import com.enflac.myapplication.utils.CoRoutineAsyncTask
-import kotlinx.android.synthetic.main.activity_main.*
-import java.util.logging.Logger
+import com.enflac.myapplication.utils.callIntent
+import com.enflac.myapplication.utils.toast
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var mBinding: ActivityMainBinding
+    private lateinit var mBinding: ActivityMainBinding
 
-    lateinit var mViewModel: MainViewModel
+    private lateinit var mViewModel: MainViewModel
+
+
+    var mUserName = ""
+    var mPassword = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBinding = DataBindingUtil.setContentView(
-            this,
-            R.layout.activity_main
-        )
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        //For Night UI
+        // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
         mViewModel = ViewModelProvider(this, MainViewModelFactory()).get(MainViewModel::class.java)
         mBinding.mainActivity = this
+        mBinding.bool = true
+
+        mBinding.viewmodel = mViewModel
+
+        mUserName = "eve.holt@reqres.in"
+        mPassword = "cityslicka"
 
         mViewModel.aUserLoggedin.observe(this, Observer {
-            Log.e("token", it.token)
+
+            if (it.token.isNotEmpty()) {
+                mBinding.bool = true
+               // val aIntent = Intent(this, SecondActivity::class.java)
+              //  startActivity(aIntent)
+
+                val aBundle=Bundle()
+                aBundle.putString("Passvalue","123")
+
+                callIntent(this,SecondActivity::class,aBundle)
+            } else {
+                toast(it.error)
+                mBinding.bool = true
+            }
         })
 
         Log.e("cycle", "onCreate")
 
-
-        val amulti = { aNumber: Int ->
-            val sq = aNumber * aNumber
-            sq
-        }
-
-        Log.e("Lamdafunction", "" + amulti(9))
-
-        val aaa: (Int) -> String = { aNumber: Int ->
-            aNumber.toString()
-        }
-
-        val add ={a:ArrayList<String>,b:String->
-            (a+b).toString()
-        }
         //  finish()
-       GetAsyncTask().execute()
+
     }
 
 
@@ -98,29 +101,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onNextActivity() {
-        Log.e("buttonClick", "buttonClick")
+        // Log.e("buttonClick", "buttonClick")
+        mBinding.bool = false
 
-      //  mViewModel.callsimple()
+        mUserName = mBinding.UserNameEdit.text.toString()
+        mPassword = mBinding.PasswordEdit.text.toString()
 
-        val aIntent = Intent(this, SecondActivity::class.java)
-        // aIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-          startActivity(aIntent)
+        mViewModel.callsimple(mUserName, mPassword)
     }
 
 
-    inner class GetAsyncTask : CoRoutineAsyncTask<Int, Int, String>() {
+    /*  inner class GetAsyncTask : CoRoutineAsyncTask<Int, Int, String>() {
 
-        private val SPLASH_DELAY_TIME: Long = 10000
-       lateinit var aProgress:ProgressBar
-        override fun onPreExecute() {
-            super.onPreExecute()
-            mainprogress.visibility=View.VISIBLE
+          private val SPLASH_DELAY_TIME: Long = 10000
+          lateinit var aProgress: ProgressBar
+          override fun onPreExecute() {
+              super.onPreExecute()
+              mainprogress.visibility = View.VISIBLE
 
-            Log.e("cycle","onPreExecute")
-        }
+              Log.e("cycle", "onPreExecute")
+          }
 
           override suspend fun doInBackground(vararg values: Int?): String {
-              Log.e("cycle","doInBackground")
+              Log.e("cycle", "doInBackground")
 
               try {
                   Thread.sleep(SPLASH_DELAY_TIME)
@@ -128,26 +131,25 @@ class MainActivity : AppCompatActivity() {
                   e.printStackTrace()
               }
 
-
               return "DONE"
-        }
+          }
 
-        override suspend fun onProgressUpdate(vararg values: Int?) {
-            val progress = values[0] ?: 0
+          override suspend fun onProgressUpdate(vararg values: Int?) {
+              val progress = values[0] ?: 0
 
-        }
+          }
 
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            Log.e("cycle","onPostExecute")
-            if (result == "DONE") {
-               // aProgress.visibility=View.GONE
-                mainprogress.visibility=View.GONE
-                button.visibility=View.VISIBLE
-                button.text = "Done"
-                Log.e("cycle","DONE")
-            }
-        }
+          override fun onPostExecute(result: String?) {
+              super.onPostExecute(result)
+              Log.e("cycle", "onPostExecute")
+              if (result == "DONE") {
+                  // aProgress.visibility=View.GONE
+                  mainprogress.visibility = View.GONE
+                  button.visibility = View.VISIBLE
+                //  button.text = "Done"
+                  Log.e("cycle", "DONE")
+              }
+          }
 
-    }
+      }*/
 }
